@@ -1,0 +1,29 @@
+{
+  "name": "vending-machine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.ts",
+    "build": "tsc",
+    "test": "vitest --ui --coverage",
+    "test:run": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ESCAFFRE-Lucas/vending-machine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ESCAFFRE-Lucas/vending-machine/issues"
+  },
+  "homepage": "https://github.com/ESCAFFRE-Lucas/vending-machine#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "vitest": "^3.2.4"
+  }
+}
