@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {ChangeCalculator} from "../../money/ChangeCalculator";
+import {VendingMachineFactory} from "../../factories/VendingMachineFactory";
 
 describe('ChangeCalculator - Customer Experience Tests', () => {
 
