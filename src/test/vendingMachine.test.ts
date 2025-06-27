@@ -1,12 +1,11 @@
 import {describe, vitest, it, beforeEach, vi, expect, Mocked} from "vitest";
-import {VendingMachine} from "../src/vendingMachine";
-import {Inventory} from "../src/inventory";
+import {Inventory} from "../inventory";
 import {IInventory} from "../interfaces/Iinventory";
+import { VendingMachineFactory } from "../factories/VendingMachineFactory";
 
 describe('Product Selection', () => {
     it('should select a valid product and return its details', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
 
         const result = vendingMachine.selectProduct('A1');
 
@@ -14,8 +13,7 @@ describe('Product Selection', () => {
     });
 
     it('should print exact product price to client when valid product is selected', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
 
         const result = vendingMachine.selectProduct('A1');
 
@@ -24,8 +22,7 @@ describe('Product Selection', () => {
     });
 
     it('should throw error when invalid product code is selected', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
 
         expect(() => {
             vendingMachine.selectProduct('Z9');
@@ -33,8 +30,7 @@ describe('Product Selection', () => {
     });
 
     it('should accept money from client and track total inserted', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
 
         vendingMachine.insertMoney(100);
         vendingMachine.insertMoney(50);
@@ -43,8 +39,7 @@ describe('Product Selection', () => {
     });
 
     it('should reject invalid money amounts', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
 
         expect(() => {
             vendingMachine.insertMoney(-10);
@@ -58,8 +53,7 @@ describe('Product Selection', () => {
 
 describe('Product Purchase', () => {
     it('should require product selection before purchase', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
         vendingMachine.insertMoney(200);
 
         expect(() => {
@@ -68,8 +62,7 @@ describe('Product Purchase', () => {
     });
 
     it('should complete purchase when sufficient money is inserted', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
         vendingMachine.selectProduct('A1');
         vendingMachine.insertMoney(200);
 
@@ -82,8 +75,7 @@ describe('Product Purchase', () => {
     });
 
     it('should reject purchase when insufficient money is inserted', () => {
-        const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine();
         vendingMachine.selectProduct('A1');
         vendingMachine.insertMoney(100);
 
@@ -103,7 +95,7 @@ describe('Stock Management', () => {
             getProduct: vi.fn().mockReturnValue({ name: 'Coca Cola', price: 150, category: 'Soda' })
         };
 
-        const vendingMachine = new VendingMachine(mockInventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine(mockInventory);
         vendingMachine.selectProduct('A1');
         vendingMachine.insertMoney(200);
 
@@ -114,7 +106,8 @@ describe('Stock Management', () => {
 
     it('should reduce stock when product is purchased', () => {
         const inventory = new Inventory();
-        const vendingMachine = new VendingMachine(inventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine(inventory);
+
         const initialStock = inventory.getStock('A1');
 
         vendingMachine.selectProduct('A1');
@@ -133,7 +126,7 @@ describe('Stock Management', () => {
             getProduct: vi.fn().mockReturnValue({ name: 'Coca Cola', price: 150, category: 'Soda' })
         };
 
-        const vendingMachine = new VendingMachine(mockInventory);
+        const vendingMachine = VendingMachineFactory.createVendingMachine(mockInventory);
         vendingMachine.selectProduct('A1');
         vendingMachine.insertMoney(200);
 

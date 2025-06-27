@@ -1,9 +1,10 @@
-import {IProduct} from "../interfaces/Iproduct";
-import {IInventory} from "../interfaces/Iinventory";
+import {IProduct} from "./interfaces/Iproduct";
+import {IInventory} from "./interfaces/Iinventory";
 
 export class VendingMachine {
     private totalInserted: number = 0;
     private selectedProduct: IProduct | null = null;
+    private selectedProductCode: string | null = null;
 
     constructor(private inventory: IInventory) {}
 
@@ -24,15 +25,16 @@ export class VendingMachine {
             throw new Error('Product not found');
         }
         this.selectedProduct = product;
+        this.selectedProductCode = code;
         return product;
     }
 
     completePurchase() {
-        if (!this.selectedProduct) {
+        if (!this.selectedProduct || !this.selectedProductCode) {
             throw new Error('No product selected');
         }
 
-        if (!this.inventory.hasStock('A1')) {
+        if (!this.inventory.hasStock(this.selectedProductCode)) {
             throw new Error('Out of stock');
         }
 
@@ -41,7 +43,7 @@ export class VendingMachine {
         }
 
         const change = this.totalInserted - this.selectedProduct.price;
-        this.inventory.removeItem('A1');
+        this.inventory.removeItem(this.selectedProductCode);
         this.totalInserted = 0;
 
         return {

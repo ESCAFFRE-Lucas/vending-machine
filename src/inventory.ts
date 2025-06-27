@@ -1,5 +1,5 @@
-import {IInventory} from "../interfaces/Iinventory";
-import {IProduct} from "../interfaces/Iproduct";
+import {IInventory} from "./interfaces/Iinventory";
+import {IProduct} from "./interfaces/Iproduct";
 
 export class Inventory implements IInventory {
     private products = new Map<string, IProduct>([
