@@ -15,10 +15,12 @@ export class ChangeCalculator {
         const result: number[] = [];
         let remainingAmount = amount;
 
+        console.log(`Calculating change for amount: ${amount} with available coins: ${Array.from(availableCoins.entries()).map(([value, count]) => `${value}x${count}`).join(', ')}`);
+
         const sortedCoinValues = Array.from(availableCoins.keys()).sort((a, b) => b - a);
 
         for (const coinValue of sortedCoinValues) {
-            let availableCount = availableCoins.get(coinValue) || 0; // ← let au lieu de const
+            let availableCount = availableCoins.get(coinValue) || 0;
 
             while (remainingAmount >= coinValue && availableCount > 0) {
                 result.push(coinValue);

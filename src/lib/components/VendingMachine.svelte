@@ -125,7 +125,7 @@
 	}
 
 	function getProductIcon(code: string): string {
-		const icons: Record<string, string> = { 'A1': '🥤', 'A2': '🥤', 'B1': '🍟' };
+		const icons: Record<string, string> = { 'A1': '🥤', 'A2': '🥤', 'B1': '🍫', 'B2': '🍫', 'C1': '🥤', 'C2': '🍊' };
 		return icons[code] || '📦';
 	}
 

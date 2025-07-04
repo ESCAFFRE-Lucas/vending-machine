@@ -188,4 +188,8 @@ export class VendingMachine {
     getCurrentSessionId(): string {
         return this.sessionId;
     }
+
+    getCoinStock(): CoinStock {
+        return this.coinStock;
+    }
 }
