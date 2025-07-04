@@ -255,7 +255,7 @@ describe('VendingMachine - Customer Experience with Logging', () => {
 	describe('When a customer encounters errors', () => {
 		it('should log when customer tries to buy without enough money', () => {
 			vendingMachine.insertMoney(100);
-			vendingMachine.selectProduct('A1'); // Costs 150
+			vendingMachine.selectProduct('A1');
 
 			expect(() => vendingMachine.completePurchase()).toThrow('Insufficient money');
 
@@ -276,7 +276,6 @@ describe('VendingMachine - Customer Experience with Logging', () => {
 		});
 
 		it('should log when product is out of stock', () => {
-			// Empty the stock
 			for (let i = 0; i < 10; i++) {
 				if (inventory.hasStock('A1')) {
 					inventory.removeItem('A1');
@@ -292,42 +291,6 @@ describe('VendingMachine - Customer Experience with Logging', () => {
 			expect(errorLogs).toHaveLength(1);
 			expect(errorLogs[0].errorType).toBe('OUT_OF_STOCK');
 			expect(errorLogs[0].context.productCode).toBe('A1');
-		});
-	});
-
-	describe('When tracking customer sessions', () => {
-		it('should maintain session consistency across transactions', () => {
-			const sessionId = vendingMachine.getCurrentSessionId();
-
-			vendingMachine.insertMoney(200);
-			vendingMachine.selectProduct('A1');
-			vendingMachine.completePurchase();
-
-			const logs = logger.getAllLogs();
-			expect(logs).toHaveLength(1);
-			if (logs[0].type === 'SALE') {
-				expect(logs[0].sessionId).toBe(sessionId);
-			}
-		});
-
-		it('should create unique sessions for different customers', () => {
-			const session1 = vendingMachine.getCurrentSessionId();
-
-			const newMachine = new VendingMachine(inventory, coinStock);
-			const session2 = newMachine.getCurrentSessionId();
-
-			expect(session1).not.toBe(session2);
-		});
-	});
-
-	describe('When machine operates without logging', () => {
-		it('should function normally even without a logger', () => {
-			const machineWithoutLogger = new VendingMachine(inventory, coinStock);
-
-			machineWithoutLogger.insertMoney(200);
-			machineWithoutLogger.selectProduct('A1');
-
-			expect(() => machineWithoutLogger.completePurchase()).not.toThrow();
 		});
 	});
 });

@@ -21,7 +21,6 @@ export class TestVendingMachineFactory implements IVendingMachineFactory {
 
         const vendingMachine = new VendingMachine(defaultInventory, coinStock);
 
-        const logger = TransactionLogger.getInstance();
         TransactionLogger.initWithVendingMachine(vendingMachine);
 
         return vendingMachine;
@@ -41,7 +40,6 @@ export class CashVendingMachineFactory implements IVendingMachineFactory {
 
         const vendingMachine = new VendingMachine(defaultInventory, coinStock);
 
-        const logger = TransactionLogger.getInstance();
         TransactionLogger.initWithVendingMachine(vendingMachine);
 
         return vendingMachine;

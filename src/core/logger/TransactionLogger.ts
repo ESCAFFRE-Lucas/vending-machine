@@ -1,4 +1,5 @@
 import type { ErrorLog, ITransactionLogger, RestockLog, SaleLog, TransactionLog } from '../interfaces/ItransactionLogger';
+import type { VendingMachine } from '../vendingMachine';
 
 export class TransactionLogger implements ITransactionLogger {
 	private static instance: TransactionLogger;
@@ -16,11 +17,9 @@ export class TransactionLogger implements ITransactionLogger {
 		return TransactionLogger.instance;
 	}
 
-	// Méthode pour initialiser le logger avec une VendingMachine
-	static initWithVendingMachine(vendingMachine: any): TransactionLogger {
+	static initWithVendingMachine(vendingMachine: VendingMachine): TransactionLogger {
 		const logger = TransactionLogger.getInstance();
 
-		// Injecter le logger dans la vending machine si elle a une méthode setLogger
 		if (vendingMachine && typeof vendingMachine.setLogger === 'function') {
 			vendingMachine.setLogger(logger);
 		}
@@ -120,24 +119,12 @@ export class TransactionLogger implements ITransactionLogger {
 		}
 	}
 
-	getTodaysLogs(): TransactionLog[] {
-		const today = new Date().toISOString().split('T')[0];
-		return this.getLogsByDate(today);
-	}
-
 	getSalesTotal(date?: string): number {
 		const salesLogs = date ?
 			this.getLogsByDate(date).filter(log => log.type === 'SALE') as SaleLog[] :
 			this.getLogsByType('SALE');
 
 		return salesLogs.reduce((total, sale) => total + sale.price, 0);
-	}
-
-	getErrorCount(errorType?: ErrorLog['errorType']): number {
-		const errorLogs = this.getLogsByType('ERROR');
-		return errorType ?
-			errorLogs.filter(error => error.errorType === errorType).length :
-			errorLogs.length;
 	}
 
 	getMostPopularProduct(): { productCode: string; productName: string; count: number } | null {
@@ -168,10 +155,5 @@ export class TransactionLogger implements ITransactionLogger {
 	getTodaysSalesCount(): number {
 		const today = new Date().toISOString().split('T')[0];
 		return this.getLogsByDate(today).filter(log => log.type === 'SALE').length;
-	}
-
-	getTodaysErrorCount(): number {
-		const today = new Date().toISOString().split('T')[0];
-		return this.getLogsByDate(today).filter(log => log.type === 'ERROR').length;
 	}
 }

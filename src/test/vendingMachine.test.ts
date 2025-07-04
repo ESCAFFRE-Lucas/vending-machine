@@ -105,6 +105,16 @@ describe('Vending Machine Tests', () => {
             }).toThrow('Out of stock');
         });
 
+        it('should allow adding stock to the inventory of the vending machine', () => {
+            const inventory = new Inventory();
+            VendingMachineFactory.createVendingMachine(inventory);
+
+            const initialStock = inventory.getStock('A1');
+            inventory.addStock('A1', 10);
+
+            expect(inventory.getStock('A1')).toBe(initialStock + 10);
+        });
+
         it('should reduce stock when product is purchased', () => {
             const inventory = new Inventory();
             const vendingMachine = VendingMachineFactory.createVendingMachine(inventory);
@@ -135,6 +145,17 @@ describe('Vending Machine Tests', () => {
             vendingMachine.completePurchase();
 
             expect(mockInventory.removeItem).toHaveBeenCalledWith('A1');
+        });
+
+        it('should get all the products that are available in the inventory for restock the vending machine', () => {
+            const inventory = new Inventory();
+            const products = inventory.getAllProducts();
+
+            expect(products).toHaveLength(6);
+            expect(products[0].code).toBe('A1');
+            expect(products[0].name).toBe('Coca Cola');
+            expect(products[0].price).toBe(150);
+            expect(products[0].stock).toBe(inventory.getStock('A1'));
         });
     });
 });
